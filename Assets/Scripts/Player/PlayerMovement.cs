@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
         var gamepad = Gamepad.current;
         var keyboard = Keyboard.current;
 
-        checkGamepadInput(gamepad);
+        if (gamepad != null) checkGamepadInput(gamepad);
         checkKeyBoardInput(keyboard);
     }
 
