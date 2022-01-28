@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum DayState
 {
@@ -15,7 +16,7 @@ public class DayNightManager : MonoBehaviour
 {
     [SerializeField] float dayTime = 30;
     [SerializeField] float nightTime = 30;
-    //[SerializeField] Panel 
+    [SerializeField] Image imgNightShader; 
 
     public static DayNightManager Instance
     {
@@ -45,6 +46,10 @@ public class DayNightManager : MonoBehaviour
     private void Start()
     {
         CurrentDayState = DayState.DAY;
+
+        Color tempColor = imgNightShader.color;
+        tempColor.a = 0f;
+        imgNightShader.color = tempColor;
     }
 
     private void Update()
@@ -86,12 +91,14 @@ public class DayNightManager : MonoBehaviour
     {
         CurrentDayState = DayState.TRANSITION;
         dayCount++;
+
+        imgNightShader.DOFade(0, 2f).OnComplete(() => CurrentDayState = DayState.DAY);
     }
 
     private void TransitionToNight()
     {
         CurrentDayState = DayState.TRANSITION;
-
+        imgNightShader.DOFade(.3f, 2f).OnComplete(() => CurrentDayState = DayState.NIGHT);
     }
 
     private void EndDayState()
