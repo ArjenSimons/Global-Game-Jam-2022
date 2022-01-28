@@ -9,11 +9,10 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movingVector, keyboardInputVector;
     [SerializeField]
     private float speed;
-    private bool pressedActionButton, noInput, keyboardWasUsed;
+    private bool noInput, keyboardWasUsed;
 
     void Start()
     {
-        pressedActionButton = false;
         keyboardWasUsed = false;
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
     }
@@ -29,8 +28,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void checkGamepadInput (Gamepad gamepad)
     {
-        if (gamepad.buttonSouth.wasPressedThisFrame) pressedActionButton = true;
-
         movingVector = gamepad.leftStick.ReadValue() * speed;
     }
 
@@ -66,18 +63,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (keyboardWasUsed) movingVector = keyboardInputVector;
         keyboardWasUsed = false;
-
-        if (keyboard.spaceKey.wasPressedThisFrame) pressedActionButton = true;
     }
 
     private void FixedUpdate()
     {
-        if (pressedActionButton)
-        {
-            Debug.Log("pressed action button");
-            pressedActionButton = false;
-        }
-
         rigidBody.velocity = movingVector;
 
         noInput = movingVector == Vector2.zero;
