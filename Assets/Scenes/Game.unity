@@ -327,8 +327,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7cfcbfa05bb8040929067a459cb9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayTime: 5
-  nightTime: 5
+  dayTime: 30
+  nightTime: 30
   imgNightShader: {fileID: 699229440}
 --- !u!1 &653857917
 GameObject:
