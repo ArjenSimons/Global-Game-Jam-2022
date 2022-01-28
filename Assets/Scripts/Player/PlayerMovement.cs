@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     {
         var gamepad = Gamepad.current;
 
+        if (gamepad == null) return;
+
         if (gamepad.buttonSouth.wasPressedThisFrame)
         {
             pressedActionButton = true;
