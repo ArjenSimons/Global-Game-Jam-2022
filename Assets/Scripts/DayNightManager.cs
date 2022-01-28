@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public enum DayState
 {
@@ -36,6 +37,11 @@ public class DayNightManager : MonoBehaviour
     }
 
     public DayState CurrentDayState { get; private set; }
+    public event Action OnDayStart;
+    public event Action OnDayEnd;
+    public event Action OnNightStart;
+    public event Action OnNightEnd;
+
 
     private static DayNightManager instance;
     private bool gameStateActive { get { return CurrentDayState != DayState.NONE && CurrentDayState != DayState.TRANSITION; } }
@@ -92,22 +98,32 @@ public class DayNightManager : MonoBehaviour
         CurrentDayState = DayState.TRANSITION;
         dayCount++;
 
-        imgNightShader.DOFade(0, 2f).OnComplete(() => CurrentDayState = DayState.DAY);
+        imgNightShader.DOFade(0, 1f).OnComplete(() =>
+        {
+            CurrentDayState = DayState.DAY;
+            OnDayStart?.Invoke();
+        });
     }
 
     private void TransitionToNight()
     {
         CurrentDayState = DayState.TRANSITION;
-        imgNightShader.DOFade(.3f, 2f).OnComplete(() => CurrentDayState = DayState.NIGHT);
+        imgNightShader.DOFade(.3f, 1f).OnComplete(() =>
+        {
+            CurrentDayState = DayState.NIGHT;
+            OnDayStart?.Invoke();
+        });
     }
 
     private void EndDayState()
     {
+        OnDayEnd?.Invoke();
         TransitionToNight();
     }
 
     private void EndNightState()
     {
+        OnNightEnd?.Invoke();
         TransitionToDay();
     }
 }
