@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-enum DayPart
+public enum DayState
 {
+    NONE,
     DAY,
-    NIGHT
+    NIGHT,
+    TRANSITION
 }
 
 public class DayNightManager : MonoBehaviour
 {
     [SerializeField] float dayTime = 30;
     [SerializeField] float nightTime = 30;
+    //[SerializeField] Panel 
 
     public static DayNightManager Instance
     {
@@ -30,6 +34,73 @@ public class DayNightManager : MonoBehaviour
         }
     }
 
-    private static DayNightManager instance;
+    public DayState CurrentDayState { get; private set; }
 
+    private static DayNightManager instance;
+    private bool gameStateActive { get { return CurrentDayState != DayState.NONE && CurrentDayState != DayState.TRANSITION; } }
+
+    private float time;
+    private int dayCount;
+
+    private void Start()
+    {
+        CurrentDayState = DayState.DAY;
+    }
+
+    private void Update()
+    {
+        if (gameStateActive)
+        {
+            time += Time.deltaTime;
+
+            if (CurrentDayState == DayState.DAY)
+            {
+                HandleDayState();
+            }
+            else if (CurrentDayState == DayState.NIGHT)
+            {
+                HandleNightState();
+            }
+        }
+    }
+
+    private void HandleDayState()
+    {
+        if (time >= dayTime)
+        {
+            EndDayState();
+            time = 0;
+        }
+    }
+
+    private void HandleNightState()
+    {
+        if (time >= nightTime)
+        {
+            EndNightState();
+            time = 0;
+        }
+    }
+
+    private void TransitionToDay()
+    {
+        CurrentDayState = DayState.TRANSITION;
+        dayCount++;
+    }
+
+    private void TransitionToNight()
+    {
+        CurrentDayState = DayState.TRANSITION;
+
+    }
+
+    private void EndDayState()
+    {
+        TransitionToNight();
+    }
+
+    private void EndNightState()
+    {
+        TransitionToDay();
+    }
 }
