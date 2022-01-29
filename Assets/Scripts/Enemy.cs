@@ -134,14 +134,7 @@ public class Enemy : MonoBehaviour
 
     private Vector3 GetRandomPatrollPoint()
     {
-        int randomIndex = Random.Range(0, PatrollPoint.Instances.Count);
-        return PatrollPoint.Instances[randomIndex].transform.position;
-    }
-
-    private Vector3 GetRandomVector2D()
-    {
-        float angle = Random.Range(0, Mathf.PI * 2);
-        Vector2 dest = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-        return new Vector3(dest.x, dest.y, 0).normalized;
+        int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
+        return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
     }
 }
