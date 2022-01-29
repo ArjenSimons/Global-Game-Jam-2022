@@ -10,15 +10,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float speed;
     private bool noInput, keyboardWasUsed;
-    private Animator animator;
-    private SpriteRenderer playerRenderer;
+    private Animator monsterNightAnimator, monsterDayAnimator;
+    private SpriteRenderer monsterNightRenderer, monsterDayRenderer;
+    [SerializeField]
+    private GameObject monsterNight, monsterDay;
 
     void Start()
     {
         keyboardWasUsed = false;
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
-        animator = gameObject.GetComponent<Animator>();
-        playerRenderer = gameObject.GetComponent<SpriteRenderer>();
+        monsterNightAnimator = monsterNight.GetComponent<Animator>();
+        monsterNightRenderer = monsterNight.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -82,14 +84,14 @@ public class PlayerMovement : MonoBehaviour
         if (noInput || PlayerHiding.Instance.isHiding)
         {
             rigidBody.velocity = Vector2.zero;
-            animator.SetBool("isWalking", false);
+            monsterNightAnimator.SetBool("isWalking", false);
         }
         else
         {
-            animator.SetBool("isWalking", true);
+            monsterNightAnimator.SetBool("isWalking", true);
         }
 
-        if (rigidBody.velocity.x < 0) playerRenderer.flipX = true;
-        if (rigidBody.velocity.x > 0) playerRenderer.flipX = false;
+        if (rigidBody.velocity.x < 0) monsterNightRenderer.flipX = true;
+        if (rigidBody.velocity.x > 0) monsterNightRenderer.flipX = false;
     }
 }
