@@ -10,7 +10,6 @@ public class PatrollPoint : MonoBehaviour
     public static List<PatrollPoint> Instances = new List<PatrollPoint>();
     public static List<PatrollPoint> AvailableParollPoints = new List<PatrollPoint>();
 
-
     private bool inPlayerRange;
     private Player player;
 

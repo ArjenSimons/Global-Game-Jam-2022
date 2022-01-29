@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
         chaseDistanceSquared = chaseDistance * chaseDistance;
 
         dayNightManager.OnDayStart += OnDayStart;
+        dayNightManager.OnDayEnd += OnDayEnd;
         dayNightManager.OnNightStart += OnNightStart;
         dayNightManager.OnNightEnd += OnNightEnd;
         
@@ -41,7 +42,9 @@ public class Enemy : MonoBehaviour
     private void OnDestroy()
     {
         dayNightManager.OnDayStart -= OnDayStart;
+        dayNightManager.OnDayEnd -= OnDayEnd;
         dayNightManager.OnNightStart -= OnNightStart;
+        dayNightManager.OnNightEnd -= OnNightEnd;
     }
 
     private void FixedUpdate()
@@ -62,6 +65,10 @@ public class Enemy : MonoBehaviour
         {
             Chase();
         }
+        else
+        {
+            Patroll();
+        }
     }
 
     private void HandleNightBehaviour()
@@ -72,16 +79,23 @@ public class Enemy : MonoBehaviour
         {
             Flee();
         }
-        else
-        {
-            Patroll();
-        }
+
     }
 
     private void OnNightStart()
     {
-        //TODO: Set Patroll target position
+        //TODO: Hide
+    }
 
+    private void OnDayEnd()
+    {
+        //TODO: Go to hiding spot
+        //TODO: Set Flee position
+        //TODO: Determine whether to hide or not
+
+    }
+    private void OnDayStart()
+    {
         patrollDestination = GetRandomPatrollPoint();
 
         agent.SetDestination(patrollDestination);
@@ -90,15 +104,11 @@ public class Enemy : MonoBehaviour
     private void OnNightEnd()
     {
         agent.ResetPath();
-        //TODO: Set Flee position
-        //TODO: Go to hiding spot
-        //TODO: Determine whether to hide or not
+        
 
     }
 
-    private void OnDayStart()
-    {
-    }
+
 
     private void Patroll()
     {

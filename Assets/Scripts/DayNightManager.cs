@@ -49,7 +49,7 @@ public class DayNightManager : MonoBehaviour
 
     private void Start()
     {
-        CurrentDayState = DayState.DAY;
+        TransitionToNight();
 
         Color tempColor = imgNightShader.color;
         tempColor.a = 0f;
