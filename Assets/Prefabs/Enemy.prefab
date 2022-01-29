@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7321627629361104405}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.32, y: 22.71, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -97,10 +97,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc50fe4d4f26740458fa3f8cda9736cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 3.5
+  hideSpeed: 20
   fleeDistance: 4
   chaseDistance: 4
   agent: {fileID: 7321627629361104409}
-  player: {fileID: 0}
+  spriteRenderer: {fileID: 7321627629361104410}
 --- !u!195 &7321627629361104409
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -112,7 +114,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
-  m_Acceleration: 8
+  m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0

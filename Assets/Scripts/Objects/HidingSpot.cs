@@ -10,6 +10,11 @@ public class HidingSpot : MonoBehaviour
     private BoxCollider2D hidingSpotCollider;
     private bool holdingPlayer;
 
+    private void Awake()
+    {
+        HidingSpotManager.Instance.AddHidingSpot(this);
+    }
+
     void Start()
     {
         PlayerHiding.Instance.onPressHideButton += OnHideButtonPressed;

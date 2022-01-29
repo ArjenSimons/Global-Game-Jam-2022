@@ -32,6 +32,7 @@ public class HidingSpotManager : MonoBehaviour
         if (!allHidingSpots.Contains(hidingSpot))
         {
             allHidingSpots.Add(hidingSpot);
+            AvailableHidingSpots.Add(hidingSpot);
         }
     }
 
@@ -49,6 +50,8 @@ public class HidingSpotManager : MonoBehaviour
 
     public HidingSpot ClaimRandomHidingSpot()
     {
+        if (AvailableHidingSpots.Count == 0) return null;
+
         HidingSpot spot = AvailableHidingSpots[Random.Range(0, AvailableHidingSpots.Count)];
         AvailableHidingSpots.Remove(spot);
         return spot;
