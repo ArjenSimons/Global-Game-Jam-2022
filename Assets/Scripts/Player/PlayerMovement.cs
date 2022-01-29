@@ -61,6 +61,8 @@ public class PlayerMovement : MonoBehaviour
             keyboardWasUsed = true;
         }
 
+        keyboardInputVector.Normalize();
+
         keyboardInputVector *= speed;
 
         if (keyboardWasUsed) movingVector = keyboardInputVector;
