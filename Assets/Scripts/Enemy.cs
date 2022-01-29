@@ -15,8 +15,11 @@ public class Enemy : MonoBehaviour
 
 
     private DayNightManager dayNightManager;
+
+    private Vector3 patrollDestination;
     private float fleeDistanceSquared;
     private float chaseDistanceSquared;
+
     private int updateDelay = 5;
     private float timer;
 
@@ -28,6 +31,17 @@ public class Enemy : MonoBehaviour
 
         fleeDistanceSquared = fleeDistance * fleeDistance;
         chaseDistanceSquared = chaseDistance * chaseDistance;
+
+        dayNightManager.OnDayStart += OnDayStart;
+        dayNightManager.OnNightStart += OnNightStart;
+        dayNightManager.OnNightEnd += OnNightEnd;
+        
+    }
+
+    private void OnDestroy()
+    {
+        dayNightManager.OnDayStart -= OnDayStart;
+        dayNightManager.OnNightStart -= OnNightStart;
     }
 
     private void FixedUpdate()
@@ -40,7 +54,6 @@ public class Enemy : MonoBehaviour
         {
             HandleNightBehaviour();
         }
-
     }
 
     private void HandleDayBehaviour()
@@ -59,6 +72,42 @@ public class Enemy : MonoBehaviour
         {
             Flee();
         }
+        else
+        {
+            Patroll();
+        }
+    }
+
+    private void OnNightStart()
+    {
+        //TODO: Set Patroll target position
+
+        patrollDestination = GetRandomPatrollPoint();
+
+        agent.SetDestination(patrollDestination);
+    }
+
+    private void OnNightEnd()
+    {
+        agent.ResetPath();
+        //TODO: Set Flee position
+        //TODO: Go to hiding spot
+        //TODO: Determine whether to hide or not
+
+    }
+
+    private void OnDayStart()
+    {
+    }
+
+    private void Patroll()
+    {
+        if (Vector3.SqrMagnitude(transform.position - patrollDestination) < .5f)
+        {
+            patrollDestination = GetRandomPatrollPoint();
+            agent.SetDestination(patrollDestination);
+        }
+
     }
 
     private void Chase()
@@ -81,5 +130,18 @@ public class Enemy : MonoBehaviour
             agent.SetDestination(runTo);
             timer = 0;
         }
+    }
+
+    private Vector3 GetRandomPatrollPoint()
+    {
+        int randomIndex = Random.Range(0, PatrollPoint.Instances.Count);
+        return PatrollPoint.Instances[randomIndex].transform.position;
+    }
+
+    private Vector3 GetRandomVector2D()
+    {
+        float angle = Random.Range(0, Mathf.PI * 2);
+        Vector2 dest = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        return new Vector3(dest.x, dest.y, 0).normalized;
     }
 }
