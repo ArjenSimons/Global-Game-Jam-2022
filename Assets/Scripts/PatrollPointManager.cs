@@ -6,6 +6,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class PatrollPointManager : MonoBehaviour
 {
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         foreach (PatrollPoint p in PatrollPoint.Instances)
@@ -13,4 +14,5 @@ public class PatrollPointManager : MonoBehaviour
             Handles.DrawLine(transform.position, p.transform.position);
         }
     }
+#endif
 }
