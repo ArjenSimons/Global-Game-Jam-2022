@@ -72,7 +72,7 @@ public class PlayerHiding : MonoBehaviour
     public void HideBehindObject (Transform hidingSpot)
     {
         isHiding = true;
-        transform.position = hidingSpot.position;
+        transform.position = hidingSpot.position + (Vector3.up * 0.01f);
     }
 
     public void LeaveHidingSpot ()

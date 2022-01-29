@@ -12,9 +12,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Floor
   - 
   - 
   - 
@@ -48,12 +48,12 @@ TagManager:
   - name: Player
     uniqueID: 1799643813
     locked: 0
+  - name: Enemy
+    uniqueID: 2213601701
+    locked: 0
   - name: HidingSpot
     uniqueID: 362376345
     locked: 0
-  - name: Enemy
-    uniqueID: 3762203265
-    locked: 0
   - name: House
-    uniqueID: 3515498411
+    uniqueID: 858981165
     locked: 0
