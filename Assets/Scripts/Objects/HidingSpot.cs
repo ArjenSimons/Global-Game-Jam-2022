@@ -15,20 +15,14 @@ public class HidingSpot : MonoBehaviour
         PlayerHiding.Instance.onPressHideButton += OnHideButtonPressed;
         hidingSpotCollider = gameObject.GetComponent<CapsuleCollider2D>();
         holdingPlayer = false;
-    }
-
-    void Update()
-    {
-
+        DayNightManager.Instance.OnNightStart += MakePlayerLeave;
     }
 
     private void OnHideButtonPressed()
     {
         if (holdingPlayer)
         {
-            holdingPlayer = false;
-            hidingSpotCollider.enabled = true;
-            PlayerHiding.Instance.LeaveHidingSpot();
+            MakePlayerLeave();
         }
 
         distanceToPlayer = Vector2.Distance(PlayerHiding.Instance.gameObject.transform.position, transform.position);
@@ -38,6 +32,14 @@ public class HidingSpot : MonoBehaviour
             hidingSpotCollider.enabled = false;
             PlayerHiding.Instance.HideBehindObject(transform);
         }
+    }
+
+    private void MakePlayerLeave ()
+    {
+        if (!holdingPlayer) return;
+        holdingPlayer = false;
+        hidingSpotCollider.enabled = true;
+        PlayerHiding.Instance.LeaveHidingSpot();
     }
 
     private void OnDrawGizmos()
