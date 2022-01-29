@@ -46,10 +46,11 @@ public class HidingSpot : MonoBehaviour
         hidingSpotCollider.enabled = true;
         PlayerHiding.Instance.LeaveHidingSpot();
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, interactionRadius);
     }
+#endif
 }

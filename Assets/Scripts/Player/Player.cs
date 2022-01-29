@@ -37,8 +37,10 @@ public class Player : MonoBehaviour
         patrollPointRange = Mathf.Lerp(PatrollPointRangeMin, PatrollPointRangeMax, normal);
     }
 
+    #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Handles.DrawWireDisc(transform.position, Vector3.forward, patrollPointRange);
     }
+    #endif
 }
