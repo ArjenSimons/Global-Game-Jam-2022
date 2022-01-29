@@ -6,19 +6,25 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [Header("Settings")]
+    [SerializeField] private float speed;
+    [SerializeField] private float hideSpeed;
     [SerializeField] private float fleeDistance = 4;
     [SerializeField] private float chaseDistance = 4;
 
     [Header("References")]
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private Transform player;
-
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
     private DayNightManager dayNightManager;
+    private HidingSpotManager hidingSpotManager;
+    private Transform player;
 
     private Vector3 patrollDestination;
     private float fleeDistanceSquared;
     private float chaseDistanceSquared;
+
+    private HidingSpot currentHidingSpot;
+    private bool isHiding;
 
     private int updateDelay = 5;
     private float timer;
@@ -28,6 +34,10 @@ public class Enemy : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         dayNightManager = DayNightManager.Instance;
+        hidingSpotManager = HidingSpotManager.Instance;
+        player = Player.Instance.transform;
+
+        agent.speed = speed;
 
         fleeDistanceSquared = fleeDistance * fleeDistance;
         chaseDistanceSquared = chaseDistance * chaseDistance;
@@ -36,7 +46,7 @@ public class Enemy : MonoBehaviour
         dayNightManager.OnDayEnd += OnDayEnd;
         dayNightManager.OnNightStart += OnNightStart;
         dayNightManager.OnNightEnd += OnNightEnd;
-        
+        dayNightManager.OnTransitionToNightStart += OnTransitionToNightStart;
     }
 
     private void OnDestroy()
@@ -45,6 +55,7 @@ public class Enemy : MonoBehaviour
         dayNightManager.OnDayEnd -= OnDayEnd;
         dayNightManager.OnNightStart -= OnNightStart;
         dayNightManager.OnNightEnd -= OnNightEnd;
+        dayNightManager.OnTransitionToNightStart -= OnTransitionToNightStart;
     }
 
     private void FixedUpdate()
@@ -56,6 +67,17 @@ public class Enemy : MonoBehaviour
         else if (dayNightManager.CurrentDayState == DayState.NIGHT)
         {
             HandleNightBehaviour();
+        }
+
+        if (currentHidingSpot != null && !isHiding)
+        {
+            //Debug.Log("running to hide spot");
+            //Debug.Log((transform.position - currentHidingSpot.transform.position).sqrMagnitude);
+            //Debug.Log(currentHidingSpot.transform.position);
+            if ((transform.position - currentHidingSpot.transform.position).sqrMagnitude < 1.5f)
+            {
+                Hide();   
+            }
         }
     }
 
@@ -75,24 +97,45 @@ public class Enemy : MonoBehaviour
     {
         //TODO: Patroll when not close to player
 
+        if (currentHidingSpot == null) return;
+
         if (Vector3.SqrMagnitude(transform.position - player.position) < chaseDistanceSquared)
         {
             Flee();
+        }
+        else
+        {
+            Patroll();
         }
 
     }
 
     private void OnNightStart()
     {
+
     }
 
     private void OnDayEnd()
     {
-        //TODO: Go to hiding spot
-        //TODO: Set Flee position
-        //TODO: Determine whether to hide or not
+
 
     }
+
+    private void OnTransitionToNightStart()
+    {
+        currentHidingSpot = hidingSpotManager.ClaimRandomHidingSpot();
+
+        if (currentHidingSpot != null)
+        {
+            agent.SetDestination(currentHidingSpot.transform.position);
+            agent.speed = hideSpeed;
+            agent.acceleration = 100;
+        }
+
+        //TODO: Set Flee position
+        //TODO: Determine whether to hide or not
+    }
+
     private void OnDayStart()
     {
         patrollDestination = GetRandomPatrollPoint();
@@ -102,6 +145,11 @@ public class Enemy : MonoBehaviour
 
     private void OnNightEnd()
     {
+        agent.speed = speed;
+        agent.acceleration = 100;
+
+        LeaveHidingSpot();
+
         //TODO: Leave hiding spot
         //TODO: 
         agent.ResetPath();
@@ -116,7 +164,6 @@ public class Enemy : MonoBehaviour
             patrollDestination = GetRandomPatrollPoint();
             agent.SetDestination(patrollDestination);
         }
-
     }
 
     private void Chase()
@@ -139,6 +186,24 @@ public class Enemy : MonoBehaviour
             agent.SetDestination(runTo);
             timer = 0;
         }
+    }
+
+    private void Hide()
+    {
+        agent.ResetPath();
+        transform.position = currentHidingSpot.transform.position + (Vector3.up * 0.01f);
+        spriteRenderer.enabled = false;
+        isHiding = true;
+    }
+
+    private void LeaveHidingSpot()
+    {
+        if (!isHiding) return;
+        isHiding = false;
+        //TODO: play animation
+        transform.Translate(Vector2.right * 2);
+        currentHidingSpot = null;
+        spriteRenderer.enabled = true;
     }
 
     private Vector3 GetRandomPatrollPoint()
