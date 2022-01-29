@@ -54,9 +54,9 @@ public class PlayerHiding : MonoBehaviour
         var gamepad = Gamepad.current;
         var keyboard = Keyboard.current;
 
-        if (gamepad.buttonSouth.wasPressedThisFrame) pressedHideButton = true;
+        if (gamepad != null && gamepad.buttonSouth.wasPressedThisFrame) pressedHideButton = true;
 
-        if (keyboard.spaceKey.wasPressedThisFrame) pressedHideButton = true;
+        if (keyboard != null && keyboard.spaceKey.wasPressedThisFrame) pressedHideButton = true;
     }
 
     private void FixedUpdate()

@@ -20,7 +20,9 @@ public class PlayerMovement : MonoBehaviour
         keyboardWasUsed = false;
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         monsterNightAnimator = monsterNight.GetComponent<Animator>();
+        monsterDayAnimator = monsterDay.GetComponent<Animator>();
         monsterNightRenderer = monsterNight.GetComponent<SpriteRenderer>();
+        monsterDayRenderer = monsterDay.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -81,17 +83,26 @@ public class PlayerMovement : MonoBehaviour
 
         noInput = movingVector == Vector2.zero;
 
+        bool isNightMonster = PlayerDayNightSwitch.Instance.isNightMonster;
+
         if (noInput || PlayerHiding.Instance.isHiding)
         {
             rigidBody.velocity = Vector2.zero;
-            monsterNightAnimator.SetBool("isWalking", false);
+            if (isNightMonster) monsterNightAnimator.SetBool("isWalking", false);
+            if (!isNightMonster) monsterDayAnimator.SetBool("isWalking", false);
         }
         else
         {
-            monsterNightAnimator.SetBool("isWalking", true);
+            if (isNightMonster) monsterNightAnimator.SetBool("isWalking", true);
+            if (!isNightMonster) monsterDayAnimator.SetBool("isWalking", true);
         }
 
-        if (rigidBody.velocity.x < 0) monsterNightRenderer.flipX = true;
-        if (rigidBody.velocity.x > 0) monsterNightRenderer.flipX = false;
+
+
+        if (isNightMonster && rigidBody.velocity.x < 0) monsterNightRenderer.flipX = true;
+        if (isNightMonster && rigidBody.velocity.x > 0) monsterNightRenderer.flipX = false;
+
+        if (!isNightMonster && rigidBody.velocity.x < 0) monsterDayRenderer.flipX = true;
+        if (!isNightMonster && rigidBody.velocity.x > 0) monsterDayRenderer.flipX = false;
     }
 }
