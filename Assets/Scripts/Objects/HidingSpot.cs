@@ -7,13 +7,13 @@ public class HidingSpot : MonoBehaviour
     [SerializeField]
     private float interactionRadius = 2f;
     private float distanceToPlayer;
-    private CapsuleCollider2D hidingSpotCollider;
+    private BoxCollider2D hidingSpotCollider;
     private bool holdingPlayer;
 
     void Start()
     {
         PlayerHiding.Instance.onPressHideButton += OnHideButtonPressed;
-        hidingSpotCollider = gameObject.GetComponent<CapsuleCollider2D>();
+        hidingSpotCollider = gameObject.GetComponent<BoxCollider2D>();
         holdingPlayer = false;
         DayNightManager.Instance.OnNightStart += MakePlayerLeave;
     }
