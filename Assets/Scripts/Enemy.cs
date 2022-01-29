@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private float fleeDistance;
+    [SerializeField] private float fleeDistance = 4;
+    [SerializeField] private float chaseDistance = 4;
 
     [Header("References")]
     [SerializeField] private NavMeshAgent agent;
@@ -15,6 +16,9 @@ public class Enemy : MonoBehaviour
 
     private DayNightManager dayNightManager;
     private float fleeDistanceSquared;
+    private float chaseDistanceSquared;
+    private int updateDelay = 5;
+    private float timer;
 
     private void Start()
     {
@@ -23,9 +27,10 @@ public class Enemy : MonoBehaviour
         dayNightManager = DayNightManager.Instance;
 
         fleeDistanceSquared = fleeDistance * fleeDistance;
+        chaseDistanceSquared = chaseDistance * chaseDistance;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (dayNightManager.CurrentDayState == DayState.DAY)
         {
@@ -48,13 +53,33 @@ public class Enemy : MonoBehaviour
 
     private void HandleNightBehaviour()
     {
-        agent.SetDestination(player.position);
+        //TODO: Patroll when not close to player
+
+        if (Vector3.SqrMagnitude(transform.position - player.position) < chaseDistanceSquared)
+        {
+            Chase();
+        }
+    }
+
+    private void Chase()
+    {
+        timer++;
+
+        if (timer >= updateDelay)
+        {
+            agent.SetDestination(player.position);
+        }
     }
 
     private void Flee()
     {
-        Vector3 runTo = transform.position + ((transform.position - player.position) * 3);
+        timer++;
+        Vector3 runTo = transform.position + ((transform.position - player.position).normalized * 3);
 
-        agent.SetDestination(runTo);
+        if (timer >= updateDelay)
+        {
+            agent.SetDestination(runTo);
+            timer = 0;
+        }
     }
 }
