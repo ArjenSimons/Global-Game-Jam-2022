@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
     private Vector3 patrollDestination;
     private float fleeDistanceSquared;
     private float chaseDistanceSquared;
+    private bool isChasing;
 
     private HidingSpot currentHidingSpot;
     private bool isHiding;
@@ -71,9 +72,6 @@ public class Enemy : MonoBehaviour
 
         if (currentHidingSpot != null && !isHiding)
         {
-            //Debug.Log("running to hide spot");
-            //Debug.Log((transform.position - currentHidingSpot.transform.position).sqrMagnitude);
-            //Debug.Log(currentHidingSpot.transform.position);
             if ((transform.position - currentHidingSpot.transform.position).sqrMagnitude < 1.5f)
             {
                 Hide();   
@@ -83,7 +81,7 @@ public class Enemy : MonoBehaviour
 
     private void HandleDayBehaviour()
     {
-        if (Vector3.SqrMagnitude(transform.position - player.position) < fleeDistanceSquared)
+        if (!PlayerHiding.Instance.isHiding && Vector3.SqrMagnitude(transform.position - player.position) < fleeDistanceSquared)
         {
             Chase();
         }
@@ -159,6 +157,12 @@ public class Enemy : MonoBehaviour
 
     private void Patroll()
     {
+        if (isChasing)
+        {
+            agent.SetDestination(GetRandomPatrollPoint());
+            isChasing = false;
+        }
+
         if (Vector3.SqrMagnitude(transform.position - patrollDestination) < .5f)
         {
             patrollDestination = GetRandomPatrollPoint();
@@ -168,6 +172,7 @@ public class Enemy : MonoBehaviour
 
     private void Chase()
     {
+        isChasing = true;
         timer++;
 
         if (timer >= updateDelay)
@@ -208,7 +213,24 @@ public class Enemy : MonoBehaviour
 
     private Vector3 GetRandomPatrollPoint()
     {
-        int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
-        return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
+        List<PatrollPoint> pointsInRange = new List<PatrollPoint>();
+        foreach (PatrollPoint p in PatrollPoint.AvailableParollPoints)
+        {
+            if ((p.transform.position - transform.position).sqrMagnitude < 2 * 2)
+            {
+                pointsInRange.Add(p);
+            }
+        }
+
+        if (pointsInRange.Count > 0)
+        {
+            int randomIndex = Random.Range(0, pointsInRange.Count);
+            return pointsInRange[randomIndex].transform.position;
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
+            return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
+        }
     }
 }
