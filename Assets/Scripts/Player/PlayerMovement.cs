@@ -10,11 +10,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float speed;
     private bool noInput, keyboardWasUsed;
+    private Animator animator;
+    private SpriteRenderer playerRenderer;
 
     void Start()
     {
         keyboardWasUsed = false;
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
+        animator = gameObject.GetComponent<Animator>();
+        playerRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -28,12 +32,12 @@ public class PlayerMovement : MonoBehaviour
         checkKeyBoardInput(keyboard);
     }
 
-    private void checkGamepadInput (Gamepad gamepad)
+    private void checkGamepadInput(Gamepad gamepad)
     {
         movingVector = gamepad.leftStick.ReadValue() * speed;
     }
 
-    private void checkKeyBoardInput (Keyboard keyboard)
+    private void checkKeyBoardInput(Keyboard keyboard)
     {
         keyboardInputVector = Vector2.zero;
 
@@ -75,6 +79,17 @@ public class PlayerMovement : MonoBehaviour
 
         noInput = movingVector == Vector2.zero;
 
-        if (noInput || PlayerHiding.Instance.isHiding) rigidBody.velocity = Vector2.zero;
+        if (noInput || PlayerHiding.Instance.isHiding)
+        {
+            rigidBody.velocity = Vector2.zero;
+            animator.SetBool("isWalking", false);
+        }
+        else
+        {
+            animator.SetBool("isWalking", true);
+        }
+
+        if (rigidBody.velocity.x < 0) playerRenderer.flipX = true;
+        if (rigidBody.velocity.x > 0) playerRenderer.flipX = false;
     }
 }
