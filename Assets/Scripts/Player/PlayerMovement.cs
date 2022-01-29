@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerHiding.Instance.isHiding) return;
+
         var gamepad = Gamepad.current;
         var keyboard = Keyboard.current;
 
@@ -71,6 +73,6 @@ public class PlayerMovement : MonoBehaviour
 
         noInput = movingVector == Vector2.zero;
 
-        if (noInput) rigidBody.velocity = Vector2.zero;
+        if (noInput || PlayerHiding.Instance.isHiding) rigidBody.velocity = Vector2.zero;
     }
 }
