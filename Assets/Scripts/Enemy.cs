@@ -84,7 +84,6 @@ public class Enemy : MonoBehaviour
 
     private void OnNightStart()
     {
-        //TODO: Hide
     }
 
     private void OnDayEnd()
@@ -103,12 +102,12 @@ public class Enemy : MonoBehaviour
 
     private void OnNightEnd()
     {
+        //TODO: Leave hiding spot
+        //TODO: 
         agent.ResetPath();
         
 
     }
-
-
 
     private void Patroll()
     {

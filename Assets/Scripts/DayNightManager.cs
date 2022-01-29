@@ -49,11 +49,11 @@ public class DayNightManager : MonoBehaviour
 
     private void Start()
     {
-        TransitionToNight();
-
         Color tempColor = imgNightShader.color;
         tempColor.a = 0f;
         imgNightShader.color = tempColor;
+
+        TransitionToNight();
     }
 
     private void Update()
