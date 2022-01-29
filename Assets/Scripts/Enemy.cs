@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
     {
         if (Vector3.SqrMagnitude(transform.position - player.position) < fleeDistanceSquared)
         {
-            Flee();
+            Chase();
         }
     }
 
@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour
 
         if (Vector3.SqrMagnitude(transform.position - player.position) < chaseDistanceSquared)
         {
-            Chase();
+            Flee();
         }
     }
 
