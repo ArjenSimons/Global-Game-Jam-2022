@@ -247,7 +247,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void LeaveHidingSpot()
+    public void LeaveHidingSpot(bool onDestroyed = false)
     {
         if (!isHiding) return;
         gameObject.GetComponent<CircleCollider2D>().enabled = true;
@@ -258,7 +258,7 @@ public class Enemy : MonoBehaviour
         agent.SetDestination(GetRandomPatrollPoint());
         isHiding = false;
         //TODO: play animation
-        transform.Translate(Vector2.right * 2);
+        if (!onDestroyed) transform.Translate(Vector2.right * 2);
         spriteRenderer.enabled = true;
         hidingSpotManager.StopHidingSpotUsage(currentHidingSpot);
         currentHidingSpot = null;

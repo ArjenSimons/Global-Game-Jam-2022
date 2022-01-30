@@ -27,6 +27,6 @@ public class PlayerAttackHitbox : MonoBehaviour
     private void OnAttack ()
     {
         if (villagerTarget != null) villagerTarget.GetComponent<Enemy>().KillEnemy();
-        if (hidingSpotTarget != null) hidingSpotTarget.GetComponent<HidingSpotDestroy>().DestroyThisHidingSpot();
+        if (hidingSpotTarget != null) hidingSpotTarget.GetComponent<HidingSpot>().DestroyThisHidingSpot();
     }
 }
