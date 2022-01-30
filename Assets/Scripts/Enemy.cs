@@ -65,16 +65,17 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (dayNightManager.CurrentDayState == DayState.DAY)
-        {
-            HandleDayBehaviour();
-        }
-        else if (currentHidingSpot != null && !isHiding)
+        if (dayNightManager.CurrentDayState == DayState.TRANSITION && currentHidingSpot != null && !isHiding)
         {
             if ((transform.position - currentHidingSpot.transform.position).sqrMagnitude < 1.5f)
             {
                 Hide();
             }
+        }
+
+        if (dayNightManager.CurrentDayState == DayState.DAY)
+        {
+            HandleDayBehaviour();
         }
         else if (dayNightManager.CurrentDayState == DayState.NIGHT)
         {
@@ -266,23 +267,6 @@ public class Enemy : MonoBehaviour
 
     private Vector3 GetRandomPatrollPoint()
     {
-        //List<PatrollPoint> pointsInRange = new List<PatrollPoint>();
-        //foreach (PatrollPoint p in PatrollPoint.AvailableParollPoints)
-        //{
-        //    if ((p.transform.position - transform.position).sqrMagnitude < 2 * 2)
-        //    {
-        //        pointsInRange.Add(p);
-        //    }
-        //}
-
-        //if (pointsInRange.Count > 0)
-        //{
-        //    int randomIndex = Random.Range(0, pointsInRange.Count);
-        //    return pointsInRange[randomIndex].transform.position;
-        //}
-        //else
-        //{
-
         if (PatrollPoint.AvailableParollPoints.Count < 5)
         {
             int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
