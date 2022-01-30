@@ -40,6 +40,7 @@ public class PlayerDayNightSwitch : MonoBehaviour
 
     private void OnDay ()
     {
+        squeek.Play();
         daysong.Play();
         monsterDay.SetActive(true);
         monsterNight.SetActive(false);
@@ -63,6 +64,5 @@ public class PlayerDayNightSwitch : MonoBehaviour
     private void OnNightEnd()
     {
         nightsong.Stop();
-        squeek.Play();
     }
 }
