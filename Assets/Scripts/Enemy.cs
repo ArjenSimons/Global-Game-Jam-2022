@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
             HandleNightBehaviour();
         }
 
-
+        
 
         //if (!isHiding)
         //{
@@ -283,8 +283,17 @@ public class Enemy : MonoBehaviour
         //}
         //else
         //{
-        int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
-        return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
+
+        if (PatrollPoint.AvailableParollPoints.Count < 5)
+        {
+            int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
+            return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, PatrollPoint.Instances.Count);
+            return PatrollPoint.Instances[randomIndex].transform.position;
+        }
         //}
     }
 }
