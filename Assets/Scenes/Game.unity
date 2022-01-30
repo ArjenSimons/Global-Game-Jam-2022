@@ -1116,9 +1116,9 @@ MonoBehaviour:
   dayTime: 10
   nightTime: 30
   imgNightShader: {fileID: 699229440}
-  cam: {fileID: 0}
+  cam: {fileID: 427142675}
   world: {fileID: 344683408}
-  player: {fileID: 0}
+  player: {fileID: 1471484543}
 --- !u!1001 &323064425
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1287,6 +1287,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3531281642683159056, guid: 576733edd24baa845b0199920cc118af, type: 3}
   m_PrefabInstance: {fileID: 347182491}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &427142675 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 6238621143484323477, guid: f027d2fa7cbe31f429d940915622f03d, type: 3}
+  m_PrefabInstance: {fileID: 6238621143203940555}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &508688405
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1433,7 +1438,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &521783894
 PrefabInstance:
@@ -4578,6 +4583,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3531281642683159056, guid: 576733edd24baa845b0199920cc118af, type: 3}
   m_PrefabInstance: {fileID: 1471102010}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1471484543 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6238621143247386160, guid: f027d2fa7cbe31f429d940915622f03d, type: 3}
+  m_PrefabInstance: {fileID: 6238621143203940555}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1525123092
 PrefabInstance:
