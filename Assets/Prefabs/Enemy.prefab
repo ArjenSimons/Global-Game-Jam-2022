@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3.5
-  hideSpeed: 20
+  hideSpeed: 17
   fleeDistance: 4
   chaseDistance: 4
   agent: {fileID: 7321627629361104409}

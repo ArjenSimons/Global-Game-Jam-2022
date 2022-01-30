@@ -77,20 +77,6 @@ public class Enemy : MonoBehaviour
         {
             HandleNightBehaviour();
         }
-
-        
-
-        //if (!isHiding)
-        //{
-        //    if (agent.velocity.magnitude < float.Epsilon && agent.hasPath)
-        //    {
-        //        Debug.Log("yeet");
-        //        agent.ResetPath();
-        //        agent.SetDestination(GetRandomPatrollPoint());
-        //        currentHidingSpot = null;
-        //        isChasing = false;
-        //    }
-        //}
     }
 
     private void HandleDayBehaviour()

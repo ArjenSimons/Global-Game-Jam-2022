@@ -77,6 +77,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (DayNightManager.Instance.CurrentDayState == DayState.TRANSITION)
+        {
+            rigidBody.velocity = Vector2.zero;
+            return;
+        }
+
         rigidBody.velocity = movingVector;
 
         noInput = movingVector == Vector2.zero;
