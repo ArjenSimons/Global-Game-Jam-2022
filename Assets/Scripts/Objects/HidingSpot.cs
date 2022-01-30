@@ -36,6 +36,7 @@ public class HidingSpot : MonoBehaviour
         {
             holdingPlayer = true;
             hidingSpotCollider.enabled = false;
+            gameObject.GetComponent<Animator>().SetTrigger("playerEnters");
             PlayerHiding.Instance.HideBehindObject(transform);
         }
     }
