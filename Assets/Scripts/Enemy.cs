@@ -285,6 +285,8 @@ public class Enemy : MonoBehaviour
         if (!canBeKilled) return;
         this.enabled = false;
         OnDeath();
+        PlayerAttack.Instance.amountOfEnemiesLeft--;
+        PlayerAttack.Instance.UpdateKillText();
         agent.enabled = false;
         gameObject.GetComponent<EnemyDayNightSwitcher>().OnDeath();
         gameObject.GetComponent<EnemyDayNightSwitcher>().enabled = false;
