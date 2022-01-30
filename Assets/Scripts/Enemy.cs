@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
     [Header("References")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Animator enemyNightAnimator;
+    [SerializeField] private GameObject enemyDay, enemyDead;
 
     private DayNightManager dayNightManager;
     private HidingSpotManager hidingSpotManager;
@@ -22,7 +24,7 @@ public class Enemy : MonoBehaviour
     private Vector3 patrollDestination;
     private float fleeDistanceSquared;
     private float chaseDistanceSquared;
-    private bool isChasing;
+    private bool isChasing, canBeKilled;
 
     private HidingSpot currentHidingSpot;
     private bool isHiding;
@@ -35,6 +37,7 @@ public class Enemy : MonoBehaviour
     {
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+        canBeKilled = true;
         dayNightManager = DayNightManager.Instance;
         hidingSpotManager = HidingSpotManager.Instance;
         player = Player.Instance.transform;
@@ -51,7 +54,7 @@ public class Enemy : MonoBehaviour
         dayNightManager.OnTransitionToNightStart += OnTransitionToNightStart;
     }
 
-    private void OnDestroy()
+    private void OnDeath()
     {
         dayNightManager.OnDayStart -= OnDayStart;
         dayNightManager.OnDayEnd -= OnDayEnd;
@@ -233,15 +236,25 @@ public class Enemy : MonoBehaviour
 
     private void Hide()
     {
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
         agent.ResetPath();
+        canBeKilled = false;
+        currentHidingSpot.enemy = this;
         transform.position = currentHidingSpot.transform.position + (Vector3.up * 0.01f);
         spriteRenderer.enabled = false;
         isHiding = true;
+
     }
 
-    private void LeaveHidingSpot()
+    public void LeaveHidingSpot()
     {
         if (!isHiding) return;
+        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+        canBeKilled = true;
+        currentHidingSpot.enemy = null;
+        agent.speed = speed;
+        agent.acceleration = 20;
+        agent.SetDestination(GetRandomPatrollPoint());
         isHiding = false;
         //TODO: play animation
         transform.Translate(Vector2.right * 2);
@@ -281,5 +294,30 @@ public class Enemy : MonoBehaviour
             return PatrollPoint.Instances[randomIndex].transform.position;
         }
         //}
+    }
+
+    public void KillEnemy ()
+    {
+        if (!canBeKilled) return;
+        this.enabled = false;
+        OnDeath();
+        agent.enabled = false;
+        gameObject.GetComponent<EnemyDayNightSwitcher>().OnDeath();
+        gameObject.GetComponent<EnemyDayNightSwitcher>().enabled = false;
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        enemyNightAnimator.SetTrigger("isDead");
+        //Destroy(gameObject, 0.3f);
+        StartCoroutine(AfterDeathAnimation());
+    }
+
+    public IEnumerator AfterDeathAnimation ()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        enemyDead.GetComponent<SpriteRenderer>().flipX = enemyNightAnimator.gameObject.GetComponent<SpriteRenderer>().flipX;
+
+        enemyNightAnimator.gameObject.SetActive(false);
+        enemyDay.SetActive(false);
+        enemyDead.SetActive(true);
     }
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3531281642683159060}
   - component: {fileID: 3531281642683159063}
   - component: {fileID: 3465558908731355063}
+  - component: {fileID: 1915281639277083199}
   m_Layer: 0
   m_Name: HidingSpot
   m_TagString: HidingSpot
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1799643813
   m_SortingLayer: 2
-  m_SortingOrder: -211
+  m_SortingOrder: 0
   m_Sprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   m_Color: {r: 0.3584906, g: 0.116996065, b: 0.018600928, a: 1}
   m_FlipX: 0
@@ -153,3 +154,15 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!114 &1915281639277083199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3531281642683159057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46737e0114c2b50468a74dae534f4ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

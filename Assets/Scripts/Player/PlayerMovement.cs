@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator monsterNightAnimator, monsterDayAnimator;
     private SpriteRenderer monsterNightRenderer, monsterDayRenderer;
     [SerializeField]
-    private GameObject monsterNight, monsterDay;
+    private GameObject monsterNight, monsterDay, attackHitboxRight, attackHitboxLeft;
 
     void Start()
     {
@@ -103,8 +103,18 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        if (isNightMonster && rigidBody.velocity.x < 0) monsterNightRenderer.flipX = true;
-        if (isNightMonster && rigidBody.velocity.x > 0) monsterNightRenderer.flipX = false;
+        if (isNightMonster && rigidBody.velocity.x < 0)
+        {
+            monsterNightRenderer.flipX = true;
+            attackHitboxRight.SetActive(false);
+            attackHitboxLeft.SetActive(true);
+        }
+        if (isNightMonster && rigidBody.velocity.x > 0)
+        {
+            monsterNightRenderer.flipX = false;
+            attackHitboxRight.SetActive(true);
+            attackHitboxLeft.SetActive(false);
+        }
 
         if (!isNightMonster && rigidBody.velocity.x < 0) monsterDayRenderer.flipX = true;
         if (!isNightMonster && rigidBody.velocity.x > 0) monsterDayRenderer.flipX = false;

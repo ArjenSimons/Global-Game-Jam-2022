@@ -9,6 +9,7 @@ public class HidingSpot : MonoBehaviour
     private float distanceToPlayer;
     private BoxCollider2D hidingSpotCollider;
     private bool holdingPlayer;
+    public Enemy enemy;
 
     private void Awake()
     {
@@ -46,6 +47,14 @@ public class HidingSpot : MonoBehaviour
         hidingSpotCollider.enabled = true;
         PlayerHiding.Instance.LeaveHidingSpot();
     }
+
+    private void OnDestroy()
+    {
+        if (enemy != null) enemy.LeaveHidingSpot();
+        HidingSpotManager.Instance.RemoveHidingSpot(this);
+        PlayerHiding.Instance.onPressHideButton -= OnHideButtonPressed;
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

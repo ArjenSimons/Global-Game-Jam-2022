@@ -43,4 +43,10 @@ public class EnemyDayNightSwitcher : MonoBehaviour
         isNight = true;
     }
 
+    public void OnDeath ()
+    {
+        DayNightManager.Instance.OnDayStart -= OnDay;
+        DayNightManager.Instance.OnNightStart -= OnNight;
+    }
+
 }
