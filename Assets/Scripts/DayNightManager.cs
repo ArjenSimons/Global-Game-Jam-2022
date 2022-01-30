@@ -81,6 +81,11 @@ public class DayNightManager : MonoBehaviour
         }
     }
 
+    public void GoToNoneState()
+    {
+        CurrentDayState = DayState.NONE;
+    }
+
     private void HandleDayState()
     {
         if (time >= dayTime)

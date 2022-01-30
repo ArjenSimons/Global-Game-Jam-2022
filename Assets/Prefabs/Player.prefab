@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 6238621142699091670}
   m_Layer: 6
   m_Name: MonsterNight
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 6238621143158318266}
   m_Layer: 6
   m_Name: MonsterDay
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -545,6 +545,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PatrollPointRangeMin: 13
   PatrollPointRangeMax: 30
+  dayAnimator: {fileID: 6238621143158318266}
+  cam: {fileID: 6238621143484323477}
 --- !u!114 &6238621143247386174
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Animator enemyNightAnimator;
     [SerializeField] private GameObject enemyDay, enemyDead;
 
+    [SerializeField] private Animator animator;
+
     private DayNightManager dayNightManager;
     private HidingSpotManager hidingSpotManager;
     private Transform player;
@@ -32,6 +34,9 @@ public class Enemy : MonoBehaviour
     private int updateDelay = 5;
     private float timer;
     private float patrollTimer;
+
+    private float attackTimer;
+    private GameObject killTarget;
 
     private void Start()
     {
@@ -53,6 +58,18 @@ public class Enemy : MonoBehaviour
         dayNightManager.OnNightEnd += OnNightEnd;
         dayNightManager.OnTransitionToNightStart += OnTransitionToNightStart;
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            killTarget = collision.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        killTarget = null;
+    }
 
     private void OnDeath()
     {
@@ -65,6 +82,7 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Player.Instance.IsDead) return;
         if (dayNightManager.CurrentDayState == DayState.TRANSITION && currentHidingSpot != null && !isHiding)
         {
             if ((transform.position - currentHidingSpot.transform.position).sqrMagnitude < 1.5f)
@@ -81,6 +99,11 @@ public class Enemy : MonoBehaviour
         {
             HandleNightBehaviour();
         }
+    }
+
+    private void Update()
+    {
+        attackTimer += Time.deltaTime;
     }
 
     private void HandleDayBehaviour()
@@ -220,6 +243,18 @@ public class Enemy : MonoBehaviour
         if (timer >= updateDelay)
         {
             agent.SetDestination(player.position);
+        }
+
+        if (attackTimer > .5f && (player.position - transform.position).sqrMagnitude < 2)
+        {
+            animator.SetTrigger("doAttack");
+            attackTimer = 0;
+
+            if (killTarget != null)
+            {
+                agent.ResetPath();
+                Player.Instance.Kill();
+            }
         }
     }
 
