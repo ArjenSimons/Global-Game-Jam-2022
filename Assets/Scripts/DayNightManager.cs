@@ -18,6 +18,10 @@ public class DayNightManager : MonoBehaviour
     [SerializeField] float nightTime = 30;
     [SerializeField] Image imgNightShader;
 
+    [SerializeField] Camera cam;
+    [SerializeField] Transform world;
+    [SerializeField] Transform player;
+
     public static DayNightManager Instance
     {
         get
@@ -56,6 +60,7 @@ public class DayNightManager : MonoBehaviour
         tempColor.a = 0f;
         imgNightShader.color = tempColor;
 
+        player = Player.Instance.transform;
         StartCoroutine(DelayedTransitionToNight(.1f));
     }
 
@@ -99,7 +104,13 @@ public class DayNightManager : MonoBehaviour
         CurrentDayState = DayState.TRANSITION;
         dayCount++;
 
-        imgNightShader.DOFade(0, 1f).OnComplete(() =>
+        cam.transform.DOMove(new Vector3(0, 0, -10), 1f).SetEase(Ease.OutQuad);
+        cam.DOOrthoSize(30, 1f).SetEase(Ease.OutQuad).OnComplete(() =>
+        {
+            StartCoroutine(ZoomInCam(2f));
+        });
+
+        imgNightShader.DOFade(0, 4f).OnComplete(() =>
         {
             CurrentDayState = DayState.DAY;
             OnDayStart?.Invoke();
@@ -112,10 +123,33 @@ public class DayNightManager : MonoBehaviour
 
         OnTransitionToNightStart?.Invoke();
 
-        imgNightShader.DOFade(.3f, 2f).OnComplete(() =>
+        float targetScale = .15f;
+
+        cam.transform.SetParent(null);
+        cam.transform.DOMove(new Vector3(0, 0, -10), 1f).SetEase(Ease.OutQuad);
+        cam.DOOrthoSize(30, 1f).SetEase(Ease.OutQuad).OnComplete(() =>
+        {
+            StartCoroutine(ZoomInCam(2f));
+        });
+
+        imgNightShader.DOFade(.3f, 4f).OnComplete(() =>
         {
             CurrentDayState = DayState.NIGHT;
             OnNightStart?.Invoke();
+        });
+    }
+
+    private IEnumerator ZoomInCam(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        cam.transform.SetParent(player);
+        cam.transform.DOLocalMove(new Vector3(0, 0, -10), 1f).SetEase(Ease.InQuad);
+        cam.DOOrthoSize(5, 1f).SetEase(Ease.InQuad).OnComplete(() =>
+        {
+            //if (toNight)
+            //{
+
+            //}
         });
     }
 
