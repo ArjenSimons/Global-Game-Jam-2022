@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -11,6 +14,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField]
     private GameObject monsterNight;
     private Animator monsterNightAnimator;
+    [SerializeField] private TextMeshProUGUI killtext;
+    [SerializeField] int amountOfEnemies;
+    public int amountOfEnemiesLeft;
 
     public static PlayerAttack Instance
     {
@@ -37,8 +43,17 @@ public class PlayerAttack : MonoBehaviour
         ableToAttack = true;
         monsterNightAnimator = monsterNight.GetComponent<Animator>();
 
+        amountOfEnemiesLeft = amountOfEnemies;
+        UpdateKillText();
+
         DayNightManager.Instance.OnDayStart += OnDay;
         DayNightManager.Instance.OnNightStart += OnNight;
+    }
+
+    public void UpdateKillText ()
+    {
+        killtext.text = amountOfEnemiesLeft + "/" + amountOfEnemies;
+        CheckGameWin();
     }
 
     private void OnDay()
@@ -75,5 +90,13 @@ public class PlayerAttack : MonoBehaviour
     public void Attack()
     {
         monsterNightAnimator.SetTrigger("doAttack");
+    }
+
+    public void CheckGameWin ()
+    {
+        if (amountOfEnemiesLeft <= 0)
+        {
+            SceneManager.LoadScene("WinScreen");
+        }
     }
 }
