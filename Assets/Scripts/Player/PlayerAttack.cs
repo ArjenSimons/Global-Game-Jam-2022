@@ -52,7 +52,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void UpdateKillText ()
     {
-        killtext.text = amountOfEnemiesLeft + "/" + amountOfEnemies;
+        killtext.text = amountOfEnemies - amountOfEnemiesLeft + "/" + amountOfEnemies;
         CheckGameWin();
     }
 
