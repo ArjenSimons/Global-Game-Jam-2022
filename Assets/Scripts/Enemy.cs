@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GameObject enemyDay, enemyDead;
 
     [SerializeField] private Animator animator;
+    [SerializeField] private AudioSource killsound;
 
     private DayNightManager dayNightManager;
     private HidingSpotManager hidingSpotManager;
@@ -327,6 +328,7 @@ public class Enemy : MonoBehaviour
         gameObject.GetComponent<EnemyDayNightSwitcher>().enabled = false;
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
         enemyNightAnimator.SetTrigger("isDead");
+        killsound.Play();
         //Destroy(gameObject, 0.3f);
         StartCoroutine(AfterDeathAnimation());
     }

@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] Animator dayAnimator;
 
     [SerializeField] Camera cam;
+    [SerializeField] AudioSource killedsound;
 
     public bool IsDead => isDead;
     private bool isDead;
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         dayAnimator.SetTrigger("isDead");
+        killedsound.Play();
 
         StartCoroutine(GoToLoseScreen(1.0f));
     }

@@ -7,6 +7,7 @@ public class PlayerDayNightSwitch : MonoBehaviour
     public bool isNightMonster;
     [SerializeField]
     private GameObject monsterNight, monsterDay;
+    [SerializeField] AudioSource daysong, nightsong, gong, squeek;
 
     public static PlayerDayNightSwitch Instance
     {
@@ -33,19 +34,35 @@ public class PlayerDayNightSwitch : MonoBehaviour
 
         DayNightManager.Instance.OnDayStart += OnDay;
         DayNightManager.Instance.OnNightStart += OnNight;
+        DayNightManager.Instance.OnDayEnd += OnDayEnd;
+        DayNightManager.Instance.OnNightEnd += OnNightEnd;
     }
 
     private void OnDay ()
     {
+        daysong.Play();
         monsterDay.SetActive(true);
         monsterNight.SetActive(false);
         isNightMonster = false;
     }
 
+    private void OnDayEnd ()
+    {
+        daysong.Stop();
+        gong.Play();
+    }
+
     private void OnNight()
     {
+        nightsong.Play();
         monsterDay.SetActive(false);
         monsterNight.SetActive(true);
         isNightMonster = true;
+    }
+
+    private void OnNightEnd()
+    {
+        nightsong.Stop();
+        squeek.Play();
     }
 }
