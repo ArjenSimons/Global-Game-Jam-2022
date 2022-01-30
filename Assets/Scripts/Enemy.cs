@@ -258,6 +258,9 @@ public class Enemy : MonoBehaviour
     {
         if (!isHiding) return;
         currentHidingSpot.enemy = null;
+        agent.speed = speed;
+        agent.acceleration = 20;
+        agent.SetDestination(GetRandomPatrollPoint());
         isHiding = false;
         //TODO: play animation
         transform.Translate(Vector2.right * 2);
