@@ -112,7 +112,7 @@ public class DayNightManager : MonoBehaviour
 
         OnTransitionToNightStart?.Invoke();
 
-        imgNightShader.DOFade(.3f, 1f).OnComplete(() =>
+        imgNightShader.DOFade(.3f, 2f).OnComplete(() =>
         {
             CurrentDayState = DayState.NIGHT;
             OnNightStart?.Invoke();

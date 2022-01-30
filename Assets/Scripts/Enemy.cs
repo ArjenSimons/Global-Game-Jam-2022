@@ -22,12 +22,14 @@ public class Enemy : MonoBehaviour
     private Vector3 patrollDestination;
     private float fleeDistanceSquared;
     private float chaseDistanceSquared;
+    private bool isChasing;
 
     private HidingSpot currentHidingSpot;
     private bool isHiding;
 
     private int updateDelay = 5;
     private float timer;
+    private float patrollTimer;
 
     private void Start()
     {
@@ -64,26 +66,36 @@ public class Enemy : MonoBehaviour
         {
             HandleDayBehaviour();
         }
+        else if (currentHidingSpot != null && !isHiding)
+        {
+            if ((transform.position - currentHidingSpot.transform.position).sqrMagnitude < 1.5f)
+            {
+                Hide();
+            }
+        }
         else if (dayNightManager.CurrentDayState == DayState.NIGHT)
         {
             HandleNightBehaviour();
         }
 
-        if (currentHidingSpot != null && !isHiding)
-        {
-            //Debug.Log("running to hide spot");
-            //Debug.Log((transform.position - currentHidingSpot.transform.position).sqrMagnitude);
-            //Debug.Log(currentHidingSpot.transform.position);
-            if ((transform.position - currentHidingSpot.transform.position).sqrMagnitude < 1.5f)
-            {
-                Hide();   
-            }
-        }
+        
+
+        //if (!isHiding)
+        //{
+        //    if (agent.velocity.magnitude < float.Epsilon && agent.hasPath)
+        //    {
+        //        Debug.Log("yeet");
+        //        agent.ResetPath();
+        //        agent.SetDestination(GetRandomPatrollPoint());
+        //        currentHidingSpot = null;
+        //        isChasing = false;
+        //    }
+        //}
     }
 
     private void HandleDayBehaviour()
     {
-        if (Vector3.SqrMagnitude(transform.position - player.position) < fleeDistanceSquared)
+        if (!PlayerHiding.Instance.isHiding && Vector3.SqrMagnitude(transform.position - player.position) < fleeDistanceSquared)
         {
             Chase();
         }
@@ -97,9 +109,9 @@ public class Enemy : MonoBehaviour
     {
         //TODO: Patroll when not close to player
 
-        if (currentHidingSpot == null) return;
+        if (currentHidingSpot != null) return;
 
-        if (Vector3.SqrMagnitude(transform.position - player.position) < chaseDistanceSquared)
+        if (!PlayerHiding.Instance.isHiding && Vector3.SqrMagnitude(transform.position - player.position) < chaseDistanceSquared)
         {
             Flee();
         }
@@ -112,7 +124,23 @@ public class Enemy : MonoBehaviour
 
     private void OnNightStart()
     {
+        //currentHidingSpot = null;
+        //patrollDestination = GetRandomPatrollPoint();
+        //agent.ResetPath();
+        //agent.SetDestination(patrollDestination);
+        if (isHiding) return;
 
+        if (currentHidingSpot != null)
+        {
+            hidingSpotManager.StopHidingSpotUsage(currentHidingSpot);
+            currentHidingSpot = null;
+        }
+
+        agent.speed = speed;
+        agent.acceleration = 20;
+
+        agent.ResetPath();
+        agent.SetDestination(GetRandomPatrollPoint());
     }
 
     private void OnDayEnd()
@@ -123,51 +151,80 @@ public class Enemy : MonoBehaviour
 
     private void OnTransitionToNightStart()
     {
-        currentHidingSpot = hidingSpotManager.ClaimRandomHidingSpot();
-
-        if (currentHidingSpot != null)
+        if (Random.Range(.0f, 1.0f) <= 0.8f)
         {
-            agent.SetDestination(currentHidingSpot.transform.position);
-            agent.speed = hideSpeed;
-            agent.acceleration = 100;
-        }
 
+            currentHidingSpot = hidingSpotManager.ClaimRandomHidingSpot();
+
+            agent.ResetPath();
+            if (currentHidingSpot != null)
+            {
+                agent.SetDestination(currentHidingSpot.transform.position);
+                agent.speed = hideSpeed;
+                agent.acceleration = 100;
+            }
+            else
+            {
+                agent.SetDestination(GetRandomPatrollPoint());
+            }
+        }
+        else
+        {
+            agent.SetDestination(GetRandomPatrollPoint());
+        }
         //TODO: Set Flee position
         //TODO: Determine whether to hide or not
     }
 
     private void OnDayStart()
     {
+        if (currentHidingSpot != null)
+        {
+            hidingSpotManager.StopHidingSpotUsage(currentHidingSpot);
+            currentHidingSpot = null;
+            isHiding = false;
+        }
         patrollDestination = GetRandomPatrollPoint();
-
+        agent.ResetPath();
         agent.SetDestination(patrollDestination);
     }
 
     private void OnNightEnd()
     {
         agent.speed = speed;
-        agent.acceleration = 100;
+        agent.acceleration = 20;
 
         LeaveHidingSpot();
 
         //TODO: Leave hiding spot
         //TODO: 
         agent.ResetPath();
-        
+
 
     }
 
     private void Patroll()
     {
-        if (Vector3.SqrMagnitude(transform.position - patrollDestination) < .5f)
+        if (isChasing)
+        {
+            agent.SetDestination(GetRandomPatrollPoint());
+            isChasing = false;
+            patrollTimer = 0;
+        }
+
+        patrollTimer += Time.deltaTime;
+
+        if (Vector3.SqrMagnitude(transform.position - patrollDestination) < 1.5f)
         {
             patrollDestination = GetRandomPatrollPoint();
             agent.SetDestination(patrollDestination);
+            patrollTimer = 0.0f;
         }
     }
 
     private void Chase()
     {
+        isChasing = true;
         timer++;
 
         if (timer >= updateDelay)
@@ -204,14 +261,42 @@ public class Enemy : MonoBehaviour
         isHiding = false;
         //TODO: play animation
         transform.Translate(Vector2.right * 2);
-        currentHidingSpot = null;
         spriteRenderer.enabled = true;
+        hidingSpotManager.StopHidingSpotUsage(currentHidingSpot);
+        currentHidingSpot = null;
+
     }
 
     private Vector3 GetRandomPatrollPoint()
     {
-        int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
-        return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
+        //List<PatrollPoint> pointsInRange = new List<PatrollPoint>();
+        //foreach (PatrollPoint p in PatrollPoint.AvailableParollPoints)
+        //{
+        //    if ((p.transform.position - transform.position).sqrMagnitude < 2 * 2)
+        //    {
+        //        pointsInRange.Add(p);
+        //    }
+        //}
+
+        //if (pointsInRange.Count > 0)
+        //{
+        //    int randomIndex = Random.Range(0, pointsInRange.Count);
+        //    return pointsInRange[randomIndex].transform.position;
+        //}
+        //else
+        //{
+
+        if (PatrollPoint.AvailableParollPoints.Count < 5)
+        {
+            int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
+            return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, PatrollPoint.Instances.Count);
+            return PatrollPoint.Instances[randomIndex].transform.position;
+        }
+        //}
     }
 
     public void KillEnemy ()
