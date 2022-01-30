@@ -17,6 +17,8 @@ public class DayNightManager : MonoBehaviour
     [SerializeField] float dayTime = 30;
     [SerializeField] float nightTime = 30;
     [SerializeField] Image imgNightShader;
+    [SerializeField] SpriteRenderer nightSkyBox;
+    [SerializeField] SpriteRenderer daySkyBox;
 
     [SerializeField] Camera cam;
     [SerializeField] Transform world;
@@ -120,6 +122,8 @@ public class DayNightManager : MonoBehaviour
             CurrentDayState = DayState.DAY;
             OnDayStart?.Invoke();
         });
+
+        nightSkyBox.DOFade(0f, 1f);
     }
 
     private void TransitionToNight()
@@ -142,6 +146,8 @@ public class DayNightManager : MonoBehaviour
             CurrentDayState = DayState.NIGHT;
             OnNightStart?.Invoke();
         });
+
+        nightSkyBox.DOFade(1f, 1f);
     }
 
     private IEnumerator ZoomInCam(float delay)
