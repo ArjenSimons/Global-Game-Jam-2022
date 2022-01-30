@@ -1113,7 +1113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7cfcbfa05bb8040929067a459cb9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayTime: 6
+  dayTime: 10
   nightTime: 10
   imgNightShader: {fileID: 699229440}
   cam: {fileID: 427142675}

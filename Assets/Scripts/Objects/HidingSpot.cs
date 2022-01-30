@@ -10,6 +10,7 @@ public class HidingSpot : MonoBehaviour
     private BoxCollider2D hidingSpotCollider;
     private bool holdingPlayer;
     public Enemy enemy;
+    private Animator animator;
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class HidingSpot : MonoBehaviour
     {
         PlayerHiding.Instance.onPressHideButton += OnHideButtonPressed;
         hidingSpotCollider = gameObject.GetComponent<BoxCollider2D>();
+        animator = gameObject.GetComponent<Animator>();
         holdingPlayer = false;
         DayNightManager.Instance.OnNightStart += MakePlayerLeave;
     }
@@ -36,6 +38,7 @@ public class HidingSpot : MonoBehaviour
         {
             holdingPlayer = true;
             hidingSpotCollider.enabled = false;
+            gameObject.GetComponent<Animator>().SetTrigger("playerEnters");
             PlayerHiding.Instance.HideBehindObject(transform);
         }
     }
@@ -48,11 +51,28 @@ public class HidingSpot : MonoBehaviour
         PlayerHiding.Instance.LeaveHidingSpot();
     }
 
-    private void OnDestroy()
+    private void WhenDestroyed()
     {
-        if (enemy != null) enemy.LeaveHidingSpot();
+        if (enemy != null) enemy.LeaveHidingSpot(true);
         HidingSpotManager.Instance.RemoveHidingSpot(this);
         PlayerHiding.Instance.onPressHideButton -= OnHideButtonPressed;
+    }
+
+    public void DestroyThisHidingSpot()
+    {
+
+
+        StartCoroutine(AfterDeathAnimation());
+    }
+
+    public IEnumerator AfterDeathAnimation()
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        animator.SetTrigger("onDestroy");
+        WhenDestroyed();
+
+        Destroy(gameObject, 1f);
     }
 
 #if UNITY_EDITOR

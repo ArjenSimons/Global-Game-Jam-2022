@@ -80,6 +80,6 @@ public class PlayerHiding : MonoBehaviour
         if (!isHiding) return;
         isHiding = false;
         // play animation
-        transform.Translate(Vector2.right * 2);
+        transform.Translate(Vector2.down * 2f);
     }
 }
