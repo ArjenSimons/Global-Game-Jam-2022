@@ -213,4 +213,9 @@ public class Enemy : MonoBehaviour
         int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
         return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
     }
+
+    public void KillEnemy ()
+    {
+        Destroy(gameObject, 0.3f);
+    }
 }
