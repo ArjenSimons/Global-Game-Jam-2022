@@ -16,6 +16,11 @@ public class PatrollPoint : MonoBehaviour
     private void Start()
     {
         player = Player.Instance;
+
+        if (!Instances.Contains(this))
+        {
+            Instances.Add(this);
+        }
     }
 
     private void Update()

@@ -218,8 +218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3.5
   hideSpeed: 20
-  fleeDistance: 4
-  chaseDistance: 4
+  fleeDistance: 5
+  chaseDistance: 8
   agent: {fileID: 7321627629361104409}
   spriteRenderer: {fileID: 1314525475745511019}
   enemyNightAnimator: {fileID: 8899332397698110124}
