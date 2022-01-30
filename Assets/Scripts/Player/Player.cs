@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 [ExecuteAlways]
 public class Player : MonoBehaviour
@@ -50,14 +51,16 @@ public class Player : MonoBehaviour
     private IEnumerator DelayedKillAnim(float delay)
     {
         yield return new WaitForSeconds(delay);
-        Debug.Log("ja");
         dayAnimator.SetTrigger("isDead");
+
+        StartCoroutine(GoToLoseScreen(1.0f));
     }
 
     private IEnumerator GoToLoseScreen(float delay)
     {
         yield return new WaitForSeconds(delay);
-        //TODO EndGame;
+        SceneManager.LoadScene("LoseScreen");
+
     }
 
     private void Update()
