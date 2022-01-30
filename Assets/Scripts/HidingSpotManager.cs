@@ -50,7 +50,11 @@ public class HidingSpotManager : MonoBehaviour
 
     public HidingSpot ClaimRandomHidingSpot()
     {
-        if (AvailableHidingSpots.Count == 0) return null;
+        if (AvailableHidingSpots.Count == 0)
+        {
+            Debug.Log("yeet");
+            return null;
+        }
 
         HidingSpot spot = AvailableHidingSpots[Random.Range(0, AvailableHidingSpots.Count)];
         AvailableHidingSpots.Remove(spot);
