@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField]
-    Button startGameButton, quitGameButton;
+    private Button startGameButton, quitGameButton;
 
     // Start is called before the first frame update
     void Start()
