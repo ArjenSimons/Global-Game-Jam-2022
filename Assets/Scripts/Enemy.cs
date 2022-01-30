@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
 
     private int updateDelay = 5;
     private float timer;
+    private float patrollTimer;
 
     private void Start()
     {
@@ -182,12 +183,16 @@ public class Enemy : MonoBehaviour
         {
             agent.SetDestination(GetRandomPatrollPoint());
             isChasing = false;
+            patrollTimer = 0;
         }
+
+        patrollTimer += Time.deltaTime;
 
         if (Vector3.SqrMagnitude(transform.position - patrollDestination) < 1.5f)
         {
             patrollDestination = GetRandomPatrollPoint();
             agent.SetDestination(patrollDestination);
+            patrollTimer = 0.0f;
         }
     }
 
@@ -236,24 +241,24 @@ public class Enemy : MonoBehaviour
 
     private Vector3 GetRandomPatrollPoint()
     {
-        List<PatrollPoint> pointsInRange = new List<PatrollPoint>();
-        foreach (PatrollPoint p in PatrollPoint.AvailableParollPoints)
-        {
-            if ((p.transform.position - transform.position).sqrMagnitude < 2 * 2)
-            {
-                pointsInRange.Add(p);
-            }
-        }
+        //List<PatrollPoint> pointsInRange = new List<PatrollPoint>();
+        //foreach (PatrollPoint p in PatrollPoint.AvailableParollPoints)
+        //{
+        //    if ((p.transform.position - transform.position).sqrMagnitude < 2 * 2)
+        //    {
+        //        pointsInRange.Add(p);
+        //    }
+        //}
 
-        if (pointsInRange.Count > 0)
-        {
-            int randomIndex = Random.Range(0, pointsInRange.Count);
-            return pointsInRange[randomIndex].transform.position;
-        }
-        else
-        {
+        //if (pointsInRange.Count > 0)
+        //{
+        //    int randomIndex = Random.Range(0, pointsInRange.Count);
+        //    return pointsInRange[randomIndex].transform.position;
+        //}
+        //else
+        //{
             int randomIndex = Random.Range(0, PatrollPoint.AvailableParollPoints.Count);
             return PatrollPoint.AvailableParollPoints[randomIndex].transform.position;
-        }
+        //}
     }
 }
