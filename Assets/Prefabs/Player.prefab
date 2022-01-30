@@ -490,7 +490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f677310d233053247a9f79fa1f1fe28d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
+  speed: 6
   monsterNight: {fileID: 6238621142699091671}
   monsterDay: {fileID: 6238621143158318267}
   attackHitboxRight: {fileID: 6238621142113900909}
