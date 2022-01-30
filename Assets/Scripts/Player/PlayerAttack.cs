@@ -11,8 +11,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField]
     private GameObject monsterNight;
     private Animator monsterNightAnimator;
-    [SerializeField]
-    private BoxCollider2D attackHitbox;
 
     public static PlayerAttack Instance
     {

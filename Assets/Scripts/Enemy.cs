@@ -191,14 +191,16 @@ public class Enemy : MonoBehaviour
     private void Hide()
     {
         agent.ResetPath();
+        currentHidingSpot.enemy = this;
         transform.position = currentHidingSpot.transform.position + (Vector3.up * 0.01f);
         spriteRenderer.enabled = false;
         isHiding = true;
     }
 
-    private void LeaveHidingSpot()
+    public void LeaveHidingSpot()
     {
         if (!isHiding) return;
+        currentHidingSpot.enemy = null;
         isHiding = false;
         //TODO: play animation
         transform.Translate(Vector2.right * 2);
