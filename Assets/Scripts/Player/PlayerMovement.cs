@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerHiding.Instance.isHiding) return;
+        if (PlayerHiding.Instance.isHiding || Player.Instance.IsDead) return;
 
         var gamepad = Gamepad.current;
         var keyboard = Keyboard.current;
@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (DayNightManager.Instance.CurrentDayState == DayState.TRANSITION)
+        if (DayNightManager.Instance.CurrentDayState == DayState.TRANSITION || Player.Instance.IsDead)
         {
             rigidBody.velocity = Vector2.zero;
             return;

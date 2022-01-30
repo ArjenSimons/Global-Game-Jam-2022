@@ -60,7 +60,10 @@ public class Enemy : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) killTarget = collision.gameObject;
+        if (collision.CompareTag("Player"))
+        {
+            killTarget = collision.gameObject;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -79,6 +82,7 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Player.Instance.IsDead) return;
         if (dayNightManager.CurrentDayState == DayState.TRANSITION && currentHidingSpot != null && !isHiding)
         {
             if ((transform.position - currentHidingSpot.transform.position).sqrMagnitude < 1.5f)
@@ -248,7 +252,8 @@ public class Enemy : MonoBehaviour
 
             if (killTarget != null)
             {
-                //TODO: Kill Target
+                agent.ResetPath();
+                Player.Instance.Kill();
             }
         }
     }
